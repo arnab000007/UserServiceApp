@@ -4,9 +4,29 @@ from rest_framework.views import APIView
 from UserService.serializer.GetUserResponseSerializer import GetUserResponseSerializer
 from UserService.serializer.GetUserRequestSerializer import GetUserRequestSerializer
 from UserService.services import UserService
+from rest_framework.permissions import IsAuthenticated
+
 
 
 class GetUserNameAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.user_service = UserService()
+
+    def get(self, request):
+        user = request.user
+        user_info = {
+            'user_name': user.name,
+            'email': user.email,
+            # Add any other fields you want to return
+        }
+        return Response({
+            'message': 'This is a secured endpoint!',
+            'user_info': user_info
+        })
+
+class GetUserNamePostAPIView(APIView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

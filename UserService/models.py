@@ -30,6 +30,10 @@ class User(models.Model):
         token.save()
         return token
 
+    @property
+    def is_authenticated(self):
+        return True
+
 
 class Token(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
